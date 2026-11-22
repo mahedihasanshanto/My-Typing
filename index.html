@@ -1,0 +1,2056 @@
+
+<!DOCTYPE html>
+<html lang="bn" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My-Typing</title>
+
+  <!-- Google Fonts: Hind Siliguri & Noto Sans Bengali for crisp Bengali ligatures, Inter & JetBrains Mono for UI/English/numbers -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Noto+Sans+Bengali:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Tailwind Configuration: Dark mode class strategy & custom font families -->
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            bangla: ['"Hind Siliguri"', '"Noto Sans Bengali"', '"Inter"', 'sans-serif'],
+            sans: ['"Inter"', '"Hind Siliguri"', 'sans-serif'],
+            mono: ['"JetBrains Mono"', '"Hind Siliguri"', 'monospace'],
+          },
+        },
+      },
+    };
+  </script>
+</head>
+
+<body class="min-h-screen bg-slate-50 text-slate-800 dark:bg-zinc-950 dark:text-zinc-100 font-bangla transition-colors duration-300 selection:bg-amber-500/30 selection:text-amber-200 overflow-x-hidden">
+
+  <!-- Main Application Shell -->
+  <div class="min-h-screen flex flex-col justify-between max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-5 sm:py-7">
+
+    <!-- ==================== HEADER ==================== -->
+    <header class="flex flex-wrap items-center justify-between gap-4 pb-5 border-b border-slate-200/80 dark:border-zinc-800/80">
+      <!-- Brand Identity -->
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center shadow-lg shadow-amber-500/20 text-zinc-950 shrink-0">
+          <!-- Keyboard Icon SVG -->
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24" aria-hidden="true">
+            <rect x="2" y="5" width="20" height="14" rx="3" />
+            <path stroke-linecap="round" d="M6 9h.01M10 9h.01M14 9h.01M18 9h.01M6 13h.01M10 13h.01M14 13h.01M18 13h.01M8 16h8" />
+          </svg>
+        </div>
+        <div>
+          <h1 id="brandTitle" class="text-xl sm:text-2xl font-bold tracking-tight text-slate-900 dark:text-white leading-tight">
+              আমার লেখা 
+          </h1>
+          <p id="brandSubtitle" class="text-xs text-slate-500 dark:text-zinc-400">
+            বাংলা ও ইংরেজি টাইপিং স্পিড টেস্ট
+          </p>
+        </div>
+      </div>
+
+      <!-- Header Utility Controls: Language Switch, Sound Toggle, Theme Toggle -->
+      <div class="flex items-center gap-2 sm:gap-3">
+        <!-- Typing & UI Language Switcher -->
+        <div class="flex items-center bg-slate-200/80 dark:bg-zinc-900 p-1 rounded-xl border border-slate-300/60 dark:border-zinc-800" role="group" aria-label="Language switcher">
+          <button id="langBnBtn" type="button" class="px-3 py-1.5 rounded-lg text-sm font-semibold transition-all duration-200 cursor-pointer">
+            বাংলা
+          </button>
+          <button id="langEnBtn" type="button" class="px-3 py-1.5 rounded-lg text-sm font-semibold font-sans transition-all duration-200 cursor-pointer">
+            English
+          </button>
+        </div>
+
+        <!-- Mechanical Key Sound Toggle -->
+        <button id="soundToggleBtn" type="button" title="কীবোর্ড সাউন্ড" aria-label="Toggle keyboard sound"
+          class="p-2.5 rounded-xl bg-white dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 text-slate-600 dark:text-zinc-400 hover:text-amber-500 dark:hover:text-amber-400 hover:border-amber-500/40 transition-all duration-200 shadow-sm cursor-pointer">
+          <svg id="soundIconOff" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M11 5L6 9H2v6h4l5 4V5z" />
+            <path stroke-linecap="round" stroke-linejoin="round" d="M23 9l-6 6M17 9l6 6" />
+          </svg>
+          <svg id="soundIconOn" class="w-5 h-5 hidden" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M11 5L6 9H2v6h4l5 4V5z" />
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15.54 8.46a5 5 0 010 7.07M19.07 4.93a10 10 0 010 14.14" />
+          </svg>
+        </button>
+
+        <!-- Dark / Light Theme Toggle -->
+        <button id="themeToggleBtn" type="button" title="থিম পরিবর্তন" aria-label="Toggle dark or light theme"
+          class="p-2.5 rounded-xl bg-white dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 text-slate-600 dark:text-zinc-400 hover:text-amber-500 dark:hover:text-amber-400 hover:border-amber-500/40 transition-all duration-200 shadow-sm cursor-pointer">
+          <!-- Sun Icon (shown in dark mode) -->
+          <svg id="themeIconSun" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="4" />
+            <path stroke-linecap="round" d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32l1.41 1.41M2 12h2m16 0h2M4.93 19.07l1.41-1.41m11.32-11.32l1.41-1.41" />
+          </svg>
+          <!-- Moon Icon (shown in light mode) -->
+          <svg id="themeIconMoon" class="w-5 h-5 hidden" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z" />
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- ==================== MAIN CONTENT ==================== -->
+    <main class="flex-1 flex flex-col justify-center py-6 sm:py-8 space-y-6">
+
+      <!-- Mode & Settings Control Pill Bar (Monkeytype-inspired) -->
+      <section aria-label="Test Configuration" class="flex justify-center">
+        <div class="inline-flex flex-wrap items-center justify-center gap-2 sm:gap-3 bg-white dark:bg-zinc-900/90 border border-slate-200/90 dark:border-zinc-800 px-3 py-2 rounded-2xl shadow-sm">
+
+          <!-- Test Mode Group: Time vs Words -->
+          <div class="flex items-center gap-1" role="group">
+            <button id="modeTimeBtn" type="button" class="px-3 py-1.5 rounded-xl text-xs sm:text-sm font-medium transition-all duration-150 cursor-pointer flex items-center gap-1.5">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path stroke-linecap="round" d="M12 7v5l3 2"/></svg>
+              <span id="modeTimeLabel">সময়</span>
+            </button>
+            <button id="modeWordsBtn" type="button" class="px-3 py-1.5 rounded-xl text-xs sm:text-sm font-medium transition-all duration-150 cursor-pointer flex items-center gap-1.5">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M4 6h16M4 12h12M4 18h8"/></svg>
+              <span id="modeWordsLabel">শব্দ</span>
+            </button>
+          </div>
+
+          <div class="hidden sm:block w-px h-5 bg-slate-200 dark:bg-zinc-800"></div>
+
+          <!-- Sub-Options Group: 15s/30s/60s or 25/50 words -->
+          <div id="subOptionsContainer" class="flex items-center gap-1 font-mono" role="group">
+            <!-- Populated dynamically via JS -->
+          </div>
+
+          <div class="hidden sm:block w-px h-5 bg-slate-200 dark:bg-zinc-800"></div>
+
+          <!-- Content Type Group: Common Words vs Sentences -->
+          <div class="flex items-center gap-1" role="group">
+            <button id="contentCommonBtn" type="button" class="px-3 py-1.5 rounded-xl text-xs sm:text-sm font-medium transition-all duration-150 cursor-pointer">
+              সাধারণ শব্দ
+            </button>
+            <button id="contentSentenceBtn" type="button" class="px-3 py-1.5 rounded-xl text-xs sm:text-sm font-medium transition-all duration-150 cursor-pointer">
+              অনুচ্ছেদ
+            </button>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ==================== LIVE TYPING SECTION ==================== -->
+      <section id="typingSection" class="space-y-4 transition-all duration-300">
+
+        <!-- Live Metrics Bar -->
+        <div class="grid grid-cols-3 gap-3 sm:gap-4 max-w-2xl mx-auto w-full">
+          <!-- WPM Metric -->
+          <div class="bg-white dark:bg-zinc-900/70 border border-slate-200/80 dark:border-zinc-800/90 rounded-2xl px-4 py-3 text-center shadow-sm">
+            <div id="metricWpmLabel" class="text-xs font-medium text-slate-500 dark:text-zinc-400 uppercase tracking-wider">গতি (WPM)</div>
+            <div id="liveWpm" class="text-2xl sm:text-3xl font-bold font-mono text-amber-500 dark:text-amber-400 mt-0.5">0</div>
+          </div>
+
+          <!-- Accuracy Metric -->
+          <div class="bg-white dark:bg-zinc-900/70 border border-slate-200/80 dark:border-zinc-800/90 rounded-2xl px-4 py-3 text-center shadow-sm">
+            <div id="metricAccLabel" class="text-xs font-medium text-slate-500 dark:text-zinc-400 uppercase tracking-wider">সঠিকতা</div>
+            <div id="liveAccuracy" class="text-2xl sm:text-3xl font-bold font-mono text-emerald-600 dark:text-emerald-400 mt-0.5">100%</div>
+          </div>
+
+          <!-- Timer / Word Progress Metric -->
+          <div class="bg-white dark:bg-zinc-900/70 border border-slate-200/80 dark:border-zinc-800/90 rounded-2xl px-4 py-3 text-center shadow-sm">
+            <div id="metricProgressLabel" class="text-xs font-medium text-slate-500 dark:text-zinc-400 uppercase tracking-wider">সময় বাকি</div>
+            <div id="liveProgress" class="text-2xl sm:text-3xl font-bold font-mono text-slate-800 dark:text-zinc-100 mt-0.5">30s</div>
+          </div>
+        </div>
+
+        <!-- Typing Arena Card -->
+        <div id="typingArena" class="relative bg-white dark:bg-zinc-900/80 border-2 border-slate-200 dark:border-zinc-800 rounded-3xl p-5 sm:p-8 shadow-lg shadow-slate-200/40 dark:shadow-black/30 transition-all duration-200 cursor-text">
+
+          <!-- Slim Top Progress Bar -->
+          <div class="w-full h-1 bg-slate-100 dark:bg-zinc-800 rounded-full overflow-hidden mb-5">
+            <div id="progressBarFill" class="h-full w-0 bg-gradient-to-r from-amber-400 to-emerald-400 rounded-full transition-all duration-200"></div>
+          </div>
+
+          <!-- Hidden Real Input Field for Full Bengali Unicode & IME (Avro, Ridmik, OS Keyboard, Mobile Gboard) Support -->
+          <input
+            id="hiddenTypingInput"
+            type="text"
+            inputmode="text"
+            autocomplete="off"
+            autocorrect="off"
+            autocapitalize="off"
+            spellcheck="false"
+            aria-label="Typing input field"
+            class="absolute inset-0 w-full h-full opacity-0 z-10 cursor-text"
+          />
+
+          <!-- 3-Line Word Display Viewport -->
+          <div id="wordsViewport" class="relative h-36 sm:h-40 overflow-hidden select-none">
+            <div id="wordsContainer" class="flex flex-wrap gap-x-3 sm:gap-x-3.5 gap-y-3 text-xl sm:text-2xl md:text-[1.65rem] leading-relaxed tracking-normal transition-transform duration-200 ease-out">
+              <!-- Words & Bengali grapheme clusters injected dynamically -->
+            </div>
+          </div>
+
+          <!-- Active IME Input Preview Bar (Helpful visual anchor for Bengali যুক্তবর্ণ & mobile typing) -->
+          <div class="mt-5 pt-4 border-t border-slate-100 dark:border-zinc-800/80 flex flex-wrap items-center justify-between gap-3 relative z-20 pointer-events-none">
+            <div class="flex items-center gap-2.5 min-w-0">
+              <span id="imeStatusDot" class="w-2.5 h-2.5 rounded-full bg-slate-300 dark:bg-zinc-700 transition-colors duration-200 shrink-0"></span>
+              <span id="imePreviewLabel" class="text-xs sm:text-sm text-slate-400 dark:text-zinc-500 shrink-0">টাইপ করছেন:</span>
+              <span id="imePreviewText" class="text-base sm:text-lg font-medium text-slate-800 dark:text-amber-300 truncate min-h-[1.75rem] px-2.5 py-0.5 rounded-lg bg-slate-100 dark:bg-zinc-800/90 border border-slate-200/70 dark:border-zinc-700/60">
+                &nbsp;
+              </span>
+            </div>
+            <div id="imeHintBadge" class="text-xs text-slate-400 dark:text-zinc-500 bg-slate-100 dark:bg-zinc-800/70 px-2.5 py-1 rounded-lg">
+              অভ্র / রিদমিক / ইউনিকোড সাপোর্টেড
+            </div>
+          </div>
+
+          <!-- Unfocused Blur Overlay Prompt -->
+          <div id="focusOverlay" class="absolute inset-0 z-20 rounded-3xl bg-white/80 dark:bg-zinc-950/75 backdrop-blur-[2px] flex flex-col items-center justify-center gap-2 transition-opacity duration-200 cursor-pointer">
+            <div class="w-11 h-11 rounded-2xl bg-amber-500/15 text-amber-500 dark:text-amber-400 flex items-center justify-center mb-1">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5" />
+              </svg>
+            </div>
+            <p id="focusOverlayText" class="text-base sm:text-lg font-semibold text-slate-800 dark:text-zinc-100 text-center px-4">
+              টাইপ শুরু করতে এখানে ক্লিক করুন
+            </p>
+            <p id="focusOverlaySubtext" class="text-xs sm:text-sm text-slate-500 dark:text-zinc-400 text-center px-4">
+              কীবোর্ডে টাইপ শুরু করলেই সময় গণনা শুরু হবে
+            </p>
+          </div>
+        </div>
+
+        <!-- Quick Actions & Shortcut Hints -->
+        <div class="flex flex-wrap items-center justify-center gap-3 sm:gap-5 pt-1">
+          <button id="restartBtn" type="button" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-slate-200/90 dark:bg-zinc-800 hover:bg-amber-500 hover:text-zinc-950 dark:hover:bg-amber-400 dark:hover:text-zinc-950 text-slate-700 dark:text-zinc-200 font-semibold text-sm transition-all duration-200 shadow-sm cursor-pointer">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h5M20 20v-5h-5" />
+              <path stroke-linecap="round" stroke-linejoin="round" d="M20.49 9A9 9 0 005.64 5.64L4 9m16 6l-1.64 3.36A9 9 0 013.51 15" />
+            </svg>
+            <span id="restartBtnLabel">নতুন টেস্ট শুরু করুন</span>
+          </button>
+
+          <div class="flex items-center gap-2 text-xs text-slate-400 dark:text-zinc-500">
+            <kbd class="px-2 py-1 rounded-md bg-slate-200/80 dark:bg-zinc-900 border border-slate-300 dark:border-zinc-800 font-mono text-slate-600 dark:text-zinc-400">Esc</kbd>
+            <span id="shortcutOrLabel">অথবা</span>
+            <kbd class="px-2 py-1 rounded-md bg-slate-200/80 dark:bg-zinc-900 border border-slate-300 dark:border-zinc-800 font-mono text-slate-600 dark:text-zinc-400">Tab</kbd>
+            <span>+</span>
+            <kbd class="px-2 py-1 rounded-md bg-slate-200/80 dark:bg-zinc-900 border border-slate-300 dark:border-zinc-800 font-mono text-slate-600 dark:text-zinc-400">Enter</kbd>
+            <span id="shortcutRestartLabel">— রিস্টার্ট</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== RESULTS DASHBOARD (Shown on Completion) ==================== -->
+      <section id="resultsSection" class="hidden space-y-5">
+        <div class="bg-white dark:bg-zinc-900/90 border border-slate-200 dark:border-zinc-800 rounded-3xl p-6 sm:p-8 shadow-xl shadow-slate-200/50 dark:shadow-black/40">
+
+          <!-- Top Header: Badge & Personal Best Notification -->
+          <div class="flex flex-wrap items-center justify-between gap-3 pb-6 border-b border-slate-200/80 dark:border-zinc-800">
+            <div>
+              <p id="resultHeading" class="text-sm font-medium text-slate-500 dark:text-zinc-400">টেস্ট সম্পন্ন হয়েছে!</p>
+              <div class="flex flex-wrap items-center gap-3 mt-1">
+                <span id="resultSpeedBadge" class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-amber-500/15 text-amber-600 dark:text-amber-300 font-bold text-base sm:text-lg border border-amber-500/30">
+                  🏆 প্রো টাইপিস্ট
+                </span>
+                <span id="newPbBadge" class="hidden inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 text-xs sm:text-sm font-semibold border border-emerald-500/30 animate-pulse">
+                  ✨ নতুন সেরা রেকর্ড!
+                </span>
+              </div>
+            </div>
+            <div id="resultTestMeta" class="text-xs sm:text-sm font-mono text-slate-500 dark:text-zinc-400 bg-slate-100 dark:bg-zinc-800/80 px-3 py-1.5 rounded-xl">
+              বাংলা • 30s • সাধারণ শব্দ
+            </div>
+          </div>
+
+          <!-- Primary Stats & WPM Chart Grid -->
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 py-6 items-center">
+            <!-- Hero WPM & Accuracy -->
+            <div class="lg:col-span-5 grid grid-cols-2 gap-4">
+              <div class="bg-slate-50 dark:bg-zinc-950/70 border border-slate-200/70 dark:border-zinc-800 rounded-2xl p-5 text-center">
+                <div id="resWpmLabel" class="text-xs font-semibold text-slate-500 dark:text-zinc-400 uppercase tracking-wider">চূড়ান্ত গতি</div>
+                <div id="resWpmValue" class="text-4xl sm:text-5xl font-bold font-mono text-amber-500 dark:text-amber-400 mt-1">0</div>
+                <div class="text-xs font-mono text-slate-400 dark:text-zinc-500 mt-1">WPM</div>
+              </div>
+              <div class="bg-slate-50 dark:bg-zinc-950/70 border border-slate-200/70 dark:border-zinc-800 rounded-2xl p-5 text-center">
+                <div id="resAccLabel" class="text-xs font-semibold text-slate-500 dark:text-zinc-400 uppercase tracking-wider">সঠিকতা</div>
+                <div id="resAccValue" class="text-4xl sm:text-5xl font-bold font-mono text-emerald-600 dark:text-emerald-400 mt-1">0%</div>
+                <div id="resAccSub" class="text-xs text-slate-400 dark:text-zinc-500 mt-1">নির্ভুলতার হার</div>
+              </div>
+            </div>
+
+            <!-- WPM Progression SVG Chart -->
+            <div class="lg:col-span-7 bg-slate-50 dark:bg-zinc-950/70 border border-slate-200/70 dark:border-zinc-800 rounded-2xl p-4">
+              <div class="flex items-center justify-between mb-2">
+                <span id="chartTitle" class="text-xs font-semibold text-slate-500 dark:text-zinc-400 uppercase tracking-wider">গতির গ্রাফ (WPM / সেকেন্ড)</span>
+                <span id="chartPeakLabel" class="text-xs font-mono text-amber-600 dark:text-amber-400">সর্বোচ্চ: 0 WPM</span>
+              </div>
+              <div id="wpmChartContainer" class="w-full h-32">
+                <!-- Inline SVG generated via JS -->
+              </div>
+            </div>
+          </div>
+
+          <!-- Detailed Breakdown Grid -->
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 pb-6">
+            <div class="bg-slate-50 dark:bg-zinc-800/40 rounded-2xl p-3.5 text-center border border-slate-200/60 dark:border-zinc-800">
+              <div id="resWordsLabel" class="text-xs text-slate-500 dark:text-zinc-400">শব্দ (সঠিক / ভুল)</div>
+              <div class="text-lg font-bold font-mono mt-1">
+                <span id="resCorrectWords" class="text-emerald-600 dark:text-emerald-400">0</span>
+                <span class="text-slate-400 dark:text-zinc-600">/</span>
+                <span id="resWrongWords" class="text-rose-500 dark:text-rose-400">0</span>
+              </div>
+            </div>
+
+            <div class="bg-slate-50 dark:bg-zinc-800/40 rounded-2xl p-3.5 text-center border border-slate-200/60 dark:border-zinc-800">
+              <div id="resCharsLabel" class="text-xs text-slate-500 dark:text-zinc-400">অক্ষর (সঠিক / ভুল)</div>
+              <div class="text-lg font-bold font-mono mt-1">
+                <span id="resCorrectChars" class="text-emerald-600 dark:text-emerald-400">0</span>
+                <span class="text-slate-400 dark:text-zinc-600">/</span>
+                <span id="resWrongChars" class="text-rose-500 dark:text-rose-400">0</span>
+              </div>
+            </div>
+
+            <div class="bg-slate-50 dark:bg-zinc-800/40 rounded-2xl p-3.5 text-center border border-slate-200/60 dark:border-zinc-800">
+              <div id="resTimeLabel" class="text-xs text-slate-500 dark:text-zinc-400">মোট সময়</div>
+              <div id="resTimeValue" class="text-lg font-bold font-mono text-slate-800 dark:text-zinc-100 mt-1">30s</div>
+            </div>
+
+            <div class="bg-slate-50 dark:bg-zinc-800/40 rounded-2xl p-3.5 text-center border border-slate-200/60 dark:border-zinc-800">
+              <div id="resBestLabel" class="text-xs text-slate-500 dark:text-zinc-400">আপনার সেরা গতি</div>
+              <div id="resBestValue" class="text-lg font-bold font-mono text-amber-500 dark:text-amber-400 mt-1">0 WPM</div>
+            </div>
+          </div>
+
+          <!-- Result Actions -->
+          <div class="flex flex-wrap items-center justify-center gap-3 pt-2">
+            <button id="tryAgainBtn" type="button" class="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-amber-500 hover:bg-amber-400 text-zinc-950 font-bold text-sm sm:text-base shadow-lg shadow-amber-500/20 transition-all duration-200 cursor-pointer">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h5M20 20v-5h-5" />
+                <path stroke-linecap="round" stroke-linejoin="round" d="M20.49 9A9 9 0 005.64 5.64L4 9m16 6l-1.64 3.36A9 9 0 013.51 15" />
+              </svg>
+              <span id="tryAgainLabel">আবার চেষ্টা করুন</span>
+            </button>
+
+            <button id="copyResultBtn" type="button" class="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-slate-100 dark:bg-zinc-800 hover:bg-slate-200 dark:hover:bg-zinc-700 text-slate-700 dark:text-zinc-200 font-semibold text-sm sm:text-base border border-slate-200 dark:border-zinc-700 transition-all duration-200 cursor-pointer">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <rect x="9" y="9" width="13" height="13" rx="2" />
+                <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1" />
+              </svg>
+              <span id="copyResultLabel">ফলাফল কপি করুন</span>
+            </button>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ==================== PERSONAL BEST & RECENT HISTORY ==================== -->
+      <section class="pt-4 space-y-4">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+          <!-- Bangla Personal Best Card -->
+          <div class="bg-white dark:bg-zinc-900/60 border border-slate-200/80 dark:border-zinc-800/80 rounded-2xl p-4 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center font-bold text-lg">
+                অ
+              </div>
+              <div>
+                <div id="pbBnTitle" class="text-xs font-medium text-slate-500 dark:text-zinc-400">বাংলা সেরা গতি</div>
+                <div id="pbBnValue" class="text-xl font-bold font-mono text-slate-800 dark:text-zinc-100">0 WPM</div>
+              </div>
+            </div>
+            <span id="pbBnBadge" class="text-xs px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-zinc-800 text-slate-500 dark:text-zinc-400">কোনো রেকর্ড নেই</span>
+          </div>
+
+          <!-- English Personal Best Card -->
+          <div class="bg-white dark:bg-zinc-900/60 border border-slate-200/80 dark:border-zinc-800/80 rounded-2xl p-4 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-600 dark:text-amber-400 flex items-center justify-center font-bold font-sans text-lg">
+                A
+              </div>
+              <div>
+                <div id="pbEnTitle" class="text-xs font-medium text-slate-500 dark:text-zinc-400">ইংরেজি সেরা গতি</div>
+                <div id="pbEnValue" class="text-xl font-bold font-mono text-slate-800 dark:text-zinc-100">0 WPM</div>
+              </div>
+            </div>
+            <span id="pbEnBadge" class="text-xs px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-zinc-800 text-slate-500 dark:text-zinc-400">কোনো রেকর্ড নেই</span>
+          </div>
+        </div>
+
+        <!-- Compact Recent History Table -->
+        <div class="bg-white dark:bg-zinc-900/60 border border-slate-200/80 dark:border-zinc-800/80 rounded-2xl overflow-hidden">
+          <div class="px-5 py-3.5 border-b border-slate-200/80 dark:border-zinc-800/80 flex flex-wrap items-center justify-between gap-2">
+            <h2 id="historyTitle" class="text-sm font-semibold text-slate-700 dark:text-zinc-200 flex items-center gap-2">
+              <svg class="w-4 h-4 text-amber-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <span>সাম্প্রতিক ফলাফল</span>
+            </h2>
+
+            <!-- Inline Clear History Control (No native confirm() dialog) -->
+            <div class="flex items-center gap-2">
+              <button id="clearHistoryBtn" type="button" class="text-xs text-slate-400 hover:text-rose-500 dark:text-zinc-500 dark:hover:text-rose-400 transition-colors cursor-pointer">
+                ইতিহাস মুছুন
+              </button>
+              <div id="clearConfirmGroup" class="hidden items-center gap-1.5">
+                <span id="clearConfirmText" class="text-xs text-rose-500 dark:text-rose-400 font-medium">নিশ্চিত?</span>
+                <button id="clearConfirmYes" type="button" class="px-2 py-0.5 rounded-md bg-rose-500 text-white text-xs font-medium hover:bg-rose-600 cursor-pointer">হ্যাঁ</button>
+                <button id="clearConfirmNo" type="button" class="px-2 py-0.5 rounded-md bg-slate-200 dark:bg-zinc-800 text-slate-600 dark:text-zinc-300 text-xs hover:bg-slate-300 dark:hover:bg-zinc-700 cursor-pointer">না</button>
+              </div>
+            </div>
+          </div>
+
+          <div id="historyContent" class="overflow-x-auto">
+            <!-- Dynamically rendered history table or empty state -->
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- ==================== FOOTER ==================== -->
+    <footer class="pt-6 pb-2 border-t border-slate-200/70 dark:border-zinc-800/70 text-center text-xs text-slate-400 dark:text-zinc-500 flex flex-wrap items-center justify-between gap-2">
+      <p id="footerTip">টিপস: দ্রুত ও নির্ভুল টাইপিংয়ের জন্য কীবোর্ডের দিকে না তাকিয়ে স্ক্রিনে মনোযোগ দিন।</p>
+      <p class="font-mono">গতিলিপি • Unicode &amp; IME Ready</p>
+    </footer>
+
+  </div>
+
+  <!-- Toast Notification (Replaces alert() cleanly) -->
+  <div id="toastBox" class="fixed bottom-5 left-1/2 -translate-x-1/2 z-50 pointer-events-none opacity-0 translate-y-3 transition-all duration-300">
+    <div id="toastMessage" class="px-4 py-2.5 rounded-xl bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 text-sm font-medium shadow-xl border border-zinc-700/60 dark:border-zinc-300">
+      বার্তা
+    </div>
+  </div>
+
+  <!-- ==================== APPLICATION LOGIC ==================== -->
+  <script>
+    (() => {
+      'use strict';
+
+      /* =====================================================================
+       * 1. BILINGUAL UI DICTIONARY (i18n)
+       * ===================================================================== */
+      const I18N = {
+        bn: {
+          brandTitle: 'গতিলিপি',
+          brandSubtitle: 'বাংলা ও ইংরেজি টাইপিং স্পিড টেস্ট',
+          modeTime: 'সময়',
+          modeWords: 'শব্দ',
+          contentCommon: 'সাধারণ শব্দ',
+          contentSentence: 'অনুচ্ছেদ',
+          metricWpm: 'গতি (WPM)',
+          metricAcc: 'সঠিকতা',
+          metricTimeLeft: 'সময় বাকি',
+          metricWordProg: 'অগ্রগতি',
+          imePreviewLabel: 'টাইপ করছেন:',
+          imeHint: 'অভ্র / রিদমিক / ইউনিকোড সাপোর্টেড',
+          focusPrompt: 'টাইপ শুরু করতে এখানে ক্লিক করুন',
+          focusSubPrompt: 'কীবোর্ডে টাইপ শুরু করলেই সময় গণনা শুরু হবে',
+          restartBtn: 'নতুন টেস্ট শুরু করুন',
+          shortcutOr: 'অথবা',
+          shortcutRestart: '— রিস্টার্ট',
+          resultHeading: 'টেস্ট সম্পন্ন হয়েছে!',
+          newPb: '✨ নতুন সেরা রেকর্ড!',
+          resWpmLabel: 'চূড়ান্ত গতি',
+          resAccLabel: 'সঠিকতা',
+          resAccSub: 'নির্ভুলতার হার',
+          chartTitle: 'গতির গ্রাফ (WPM / সেকেন্ড)',
+          chartPeak: 'সর্বোচ্চ:',
+          resWordsLabel: 'শব্দ (সঠিক / ভুল)',
+          resCharsLabel: 'অক্ষর (সঠিক / ভুল)',
+          resTimeLabel: 'মোট সময়',
+          resBestLabel: 'আপনার সেরা গতি',
+          tryAgain: 'আবার চেষ্টা করুন',
+          copyResult: 'ফলাফল কপি করুন',
+          pbBnTitle: 'বাংলা সেরা গতি',
+          pbEnTitle: 'ইংরেজি সেরা গতি',
+          noRecord: 'কোনো রেকর্ড নেই',
+          historyTitle: 'সাম্প্রতিক ফলাফল',
+          clearHistory: 'ইতিহাস মুছুন',
+          clearConfirm: 'নিশ্চিত?',
+          yes: 'হ্যাঁ',
+          no: 'না',
+          emptyHistory: 'এখনো কোনো টেস্ট সম্পন্ন হয়নি। প্রথম টেস্ট দিয়ে আপনার গতি যাচাই করুন!',
+          colLang: 'ভাষা',
+          colMode: 'মোড',
+          colWpm: 'গতি',
+          colAcc: 'সঠিকতা',
+          colBadge: 'ব্যাজ',
+          colDate: 'সময়',
+          footerTip: 'টিপস: দ্রুত ও নির্ভুল টাইপিংয়ের জন্য কীবোর্ডের দিকে না তাকিয়ে স্ক্রিনে মনোযোগ দিন।',
+          copiedToast: 'ফলাফল ক্লিপবোর্ডে কপি করা হয়েছে!',
+          copyFailedToast: 'কপি করা সম্ভব হয়নি।',
+          clearedToast: 'সব ইতিহাস মুছে ফেলা হয়েছে।',
+          soundOnToast: 'কীবোর্ড সাউন্ড চালু করা হয়েছে',
+          soundOffToast: 'কীবোর্ড সাউন্ড বন্ধ করা হয়েছে',
+          langLabelBn: 'বাংলা',
+          langLabelEn: 'English',
+          wordsUnit: 'শব্দ',
+          badges: [
+            { min: 70, label: '👑 গতির রাজা' },
+            { min: 50, label: '🏆 প্রো টাইপিস্ট' },
+            { min: 35, label: '🚀 দ্রুতগামী' },
+            { min: 20, label: '⚡ উদীয়মান' },
+            { min: 0,  label: '🌱 শিক্ষানবিশ' },
+          ],
+        },
+        en: {
+          brandTitle: 'GotiLipi',
+          brandSubtitle: 'Bengali & English Typing Speed Test',
+          modeTime: 'Time',
+          modeWords: 'Words',
+          contentCommon: 'Common Words',
+          contentSentence: 'Paragraphs',
+          metricWpm: 'Speed (WPM)',
+          metricAcc: 'Accuracy',
+          metricTimeLeft: 'Time Left',
+          metricWordProg: 'Progress',
+          imePreviewLabel: 'Typing:',
+          imeHint: 'Smooth Live Tracking',
+          focusPrompt: 'Click here to start typing',
+          focusSubPrompt: 'Timer begins automatically on your first keystroke',
+          restartBtn: 'Restart Test',
+          shortcutOr: 'or',
+          shortcutRestart: '— Restart',
+          resultHeading: 'Test Completed!',
+          newPb: '✨ New Personal Best!',
+          resWpmLabel: 'Final Speed',
+          resAccLabel: 'Accuracy',
+          resAccSub: 'Precision rate',
+          chartTitle: 'Speed Graph (WPM / sec)',
+          chartPeak: 'Peak:',
+          resWordsLabel: 'Words (Correct / Wrong)',
+          resCharsLabel: 'Chars (Correct / Wrong)',
+          resTimeLabel: 'Time Taken',
+          resBestLabel: 'Personal Best',
+          tryAgain: 'Try Again',
+          copyResult: 'Copy Result',
+          pbBnTitle: 'Bangla Personal Best',
+          pbEnTitle: 'English Personal Best',
+          noRecord: 'No record yet',
+          historyTitle: 'Recent History',
+          clearHistory: 'Clear History',
+          clearConfirm: 'Sure?',
+          yes: 'Yes',
+          no: 'No',
+          emptyHistory: 'No tests completed yet. Finish a test to track your speed progress!',
+          colLang: 'Language',
+          colMode: 'Mode',
+          colWpm: 'WPM',
+          colAcc: 'Accuracy',
+          colBadge: 'Rank',
+          colDate: 'Date',
+          footerTip: 'Tip: Keep your eyes on the screen and maintain a steady rhythm for higher accuracy.',
+          copiedToast: 'Result copied to clipboard!',
+          copyFailedToast: 'Could not copy result.',
+          clearedToast: 'History cleared.',
+          soundOnToast: 'Key sound enabled',
+          soundOffToast: 'Key sound muted',
+          langLabelBn: 'বাংলা',
+          langLabelEn: 'English',
+          wordsUnit: 'words',
+          badges: [
+            { min: 70, label: '👑 Speed King' },
+            { min: 50, label: '🏆 Pro Typist' },
+            { min: 35, label: '🚀 Fast Typist' },
+            { min: 20, label: '⚡ Rising Typist' },
+            { min: 0,  label: '🌱 Beginner' },
+          ],
+        },
+      };
+
+      /* =====================================================================
+       * 2. CURATED BENGALI & ENGLISH CORPORA (Words & Meaningful Paragraphs)
+       * ===================================================================== */
+      const CORPUS = {
+        bn: {
+          words: [
+            'বাংলাদেশ', 'মানুষ', 'সময়', 'জীবন', 'পৃথিবী', 'ভালোবাসা', 'স্বপ্ন', 'আকাশ', 'নদী', 'সবুজ',
+            'বৃষ্টি', 'সকাল', 'সন্ধ্যা', 'রাত', 'আলো', 'অন্ধকার', 'বন্ধু', 'পরিবার', 'মাটি', 'বাতাস',
+            'ফুল', 'পাখি', 'গাছ', 'পাহাড়', 'সমুদ্র', 'বই', 'কলম', 'কবিতা', 'গান', 'গল্প',
+            'ইতিহাস', 'বিজ্ঞান', 'প্রযুক্তি', 'কম্পিউটার', 'ইন্টারনেট', 'শিক্ষা', 'জ্ঞান', 'বুদ্ধি', 'কাজ', 'সফলতা',
+            'পরিশ্রম', 'চেষ্টা', 'ধৈর্য', 'সাহস', 'বিশ্বাস', 'আশা', 'আনন্দ', 'হাসি', 'মন', 'হৃদয়',
+            'কথা', 'ভাষা', 'বাংলা', 'শব্দ', 'বাক্য', 'লেখা', 'পড়া', 'শেখা', 'জানা', 'চলা',
+            'দেখা', 'শোনা', 'ভাবা', 'বোঝা', 'নতুন', 'পুরাতন', 'বড়', 'ছোট', 'সুন্দর', 'সহজ',
+            'কঠিন', 'দ্রুত', 'ধীরে', 'সত্য', 'ভালো', 'শান্তি', 'স্বাধীনতা', 'উন্নয়ন', 'ভবিষ্যৎ', 'বর্তমান',
+            'অতীত', 'শহর', 'গ্রাম', 'রাস্তা', 'বাড়ি', 'বিদ্যালয়', 'বিশ্ববিদ্যালয়', 'বাজার', 'খাবার', 'পানি',
+            'রঙ', 'ছবি', 'খেলা', 'ক্রিকেট', 'ফুটবল', 'সঙ্গীত', 'সংস্কৃতি', 'ঐতিহ্য', 'উৎসব', 'বৈশাখ',
+            'শরৎ', 'বসন্ত', 'শীত', 'গ্রীষ্ম', 'মেঘ', 'চাঁদ', 'সূর্য', 'তারা', 'প্রকৃতি', 'পরিবেশ',
+            'স্বাস্থ্য', 'অর্থনীতি', 'সমাজ', 'দেশ', 'জাতি', 'প্রতিদিন', 'সঠিক', 'নিয়মিত', 'অভিজ্ঞতা', 'দক্ষতা'
+          ],
+          sentences: [
+            'সবুজ শ্যামল আমাদের এই বাংলাদেশ অসংখ্য নদী আর দিগন্তজোড়া ফসলের মাঠে ঘেরা। ভোরের স্নিগ্ধ আলোয় পাখির ডাকে এখানে প্রতিদিন নতুন সকালের শুরু হয়।',
+            'নিয়মিত অনুশীলন এবং ধৈর্যের মাধ্যমে যেকোনো দক্ষতা অর্জন করা সম্ভব। দ্রুত ও নির্ভুল টাইপিং শেখার জন্য প্রতিদিন অন্তত দশ মিনিট মনোযোগ দিয়ে চর্চা করা উচিত।',
+            'প্রযুক্তির এই যুগে কম্পিউটার এবং ইন্টারনেট আমাদের দৈনন্দিন জীবনের অবিচ্ছেদ্য অংশ হয়ে উঠেছে। বাংলা ভাষায় দ্রুত লিখতে পারা এখন পড়াশোনা ও কর্মক্ষেত্রে দারুণ সুবিধা এনে দেয়।',
+            'বই মানুষের সবচেয়ে ভালো বন্ধু যা আমাদের চিন্তার জগৎকে প্রসারিত করে। একটি ভালো বই পড়লে নতুন অভিজ্ঞতা অর্জন হয় এবং জীবনের দৃষ্টিভঙ্গি বদলে যায়।',
+            'বর্ষাকালে আকাশ কালো মেঘে ঢেকে যায় এবং রিমঝিম বৃষ্টিতে প্রকৃতি নতুন প্রাণ ফিরে পায়। টিনের চালে বৃষ্টির শব্দ আর এক কাপ গরম চা বাঙালির চিরন্তন ভালোবাসা।',
+            'সফলতা কখনো একদিনে আসে না বরং ছোট ছোট সঠিক পদক্ষেপের মাধ্যমেই বড় লক্ষ্য অর্জিত হয়। ভুল থেকে শিক্ষা নিয়ে সামনে এগিয়ে যাওয়াই প্রকৃত বুদ্ধিমানের কাজ।',
+            'শরতের নীল আকাশে সাদা মেঘের ভেলা আর নদীর ধারে কাশফুলের দোলা মনকে প্রশান্ত করে। প্রকৃতির এই অপূর্ব সৌন্দর্য আমাদের ক্লান্তি দূর করে নতুন উদ্যম জোগায়।',
+            'মানুষের মনের ভাব প্রকাশের সবচেয়ে শক্তিশালী মাধ্যম হলো মাতৃভাষা। বাংলা ভাষা আমাদের গর্ব আমাদের ঐতিহ্য এবং হাজার বছরের সমৃদ্ধ সংস্কৃতির ধারক ও বাহক।'
+          ],
+        },
+        en: {
+          words: [
+            'time', 'people', 'world', 'life', 'work', 'system', 'design', 'future', 'bright', 'stream',
+            'forest', 'river', 'ocean', 'mountain', 'morning', 'evening', 'silence', 'melody', 'story', 'poetry',
+            'science', 'modern', 'digital', 'keyboard', 'screen', 'speed', 'focus', 'rhythm', 'typing', 'skill',
+            'practice', 'patience', 'courage', 'honest', 'simple', 'clean', 'smooth', 'steady', 'balance', 'energy',
+            'create', 'build', 'learn', 'explore', 'discover', 'imagine', 'believe', 'achieve', 'growth', 'vision',
+            'garden', 'flower', 'breeze', 'window', 'shadow', 'planet', 'galaxy', 'horizon', 'summer', 'winter',
+            'spring', 'autumn', 'rain', 'cloud', 'coffee', 'paper', 'letter', 'number', 'memory', 'moment',
+            'change', 'journey', 'bridge', 'island', 'village', 'harbor', 'market', 'travel', 'craft', 'spark',
+            'motion', 'signal', 'engine', 'code', 'logic', 'puzzle', 'answer', 'reason', 'clarity', 'detail',
+            'strong', 'gentle', 'active', 'clever', 'fluent', 'natural', 'vibrant', 'minimal', 'classic', 'direct'
+          ],
+          sentences: [
+            'Consistent daily practice is the quiet secret behind effortless speed and precision. Focus on accuracy first and natural rhythm will carry your fingers forward.',
+            'Modern technology connects ideas across continents in a fraction of a second. Learning to type smoothly in multiple languages opens doors to global communication.',
+            'A calm morning breeze drifted through the open window while sunlight painted warm patterns across the wooden desk. Every small habit shapes the direction of our days.',
+            'Great writing begins with clear thinking and a willingness to refine each sentence. When tools stay simple and distraction free, creativity flows without friction.',
+            'Rivers wind patiently through valleys before reaching the wide expanse of the ocean. In the same way, steady effort transforms modest beginnings into lasting mastery.',
+            'Books preserve the wisdom of centuries and allow us to travel through time without leaving our chair. Each page invites curiosity and sharpens our understanding of the world.'
+          ],
+        },
+      };
+
+      /* =====================================================================
+       * 3. BENGALI UNICODE NORMALIZATION & GRAPHEME SEGMENTATION ENGINE
+       * =====================================================================
+       * Crucial for Bengali: Splitting by UTF-16 characters breaks যুক্তবর্ণ
+       * (conjunct ligatures) and pre-base vowel signs (কার). Using
+       * Intl.Segmenter('bn', { granularity: 'grapheme' }) keeps each visual
+       * cluster intact so highlighting never corrupts Bengali rendering.
+       */
+      const segmenters = {};
+
+      function getSegmenter(lang) {
+        if (typeof Intl !== 'undefined' && typeof Intl.Segmenter === 'function') {
+          if (!segmenters[lang]) {
+            segmenters[lang] = new Intl.Segmenter(lang, { granularity: 'grapheme' });
+          }
+          return segmenters[lang];
+        }
+        return null;
+      }
+
+      /**
+       * Normalizes Bengali Unicode canonical forms for fair comparison across
+       * Avro, Ridmik, Windows/macOS IME, and mobile keyboards.
+       * Example: ে + া => ো, ড + ় => ড়, strips invisible ZWJ/ZWNJ in compare mode.
+       */
+      function normalizeUnicode(str, forCompare = false) {
+        if (!str) return '';
+        let normalized = str.normalize('NFC');
+        // Canonicalize split Bengali two-part vowel signs
+        normalized = normalized
+          .replace(/\u09C7\u09BE/g, '\u09CB') // ে + া -> ো
+          .replace(/\u09C7\u09D7/g, '\u09CC') // ে + ৗ -> ৌ
+          .replace(/\u09A1\u09BC/g, '\u09DC') // ড + ় -> ড়
+          .replace(/\u09A2\u09BC/g, '\u09DD') // ঢ + ় -> ঢ়
+          .replace(/\u09AF\u09BC/g, '\u09DF'); // য + ় -> য়
+        if (forCompare) {
+          // Strip Zero-Width Joiner / Non-Joiner differences during equality check
+          normalized = normalized.replace(/[\u200C\u200D]/g, '');
+        }
+        return normalized;
+      }
+
+      /**
+       * Segments a word into visual grapheme clusters (অক্ষর / যুক্তবর্ণ).
+       */
+      function splitGraphemes(word, lang) {
+        const clean = normalizeUnicode(word, false);
+        const seg = getSegmenter(lang);
+        if (seg) {
+          return Array.from(seg.segment(clean), (s) => s.segment);
+        }
+        // Fallback regex grouping Bengali conjuncts (consonant + hasanta + consonant) and vowel signs
+        if (lang === 'bn') {
+          const matches = clean.match(/(?:[\u0980-\u09FF](?:\u09CD[\u0980-\u09FF])*[\u09BE-\u09CC\u09D7\u0981-\u0983\u09BC]*)|./g);
+          return matches || [];
+        }
+        return Array.from(clean);
+      }
+
+      /* =====================================================================
+       * 4. WEB AUDIO API MECHANICAL KEY SOUND SYNTHESIZER
+       * ===================================================================== */
+      let audioCtx = null;
+
+      function initAudio() {
+        try {
+          if (!audioCtx) {
+            const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+            if (AudioContextClass) {
+              audioCtx = new AudioContextClass();
+            }
+          }
+          if (audioCtx && audioCtx.state === 'suspended') {
+            audioCtx.resume();
+          }
+        } catch (err) {
+          // Audio unavailable; fail silently
+        }
+      }
+
+      /**
+       * Generates a subtle, tactile mechanical key sound using Web Audio API.
+       * @param {'key'|'space'|'error'} type
+       */
+      function playKeySound(type = 'key') {
+        if (!state.soundEnabled) return;
+        try {
+          initAudio();
+          if (!audioCtx) return;
+
+          const now = audioCtx.currentTime;
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+          const filter = audioCtx.createBiquadFilter();
+
+          filter.type = 'bandpass';
+
+          if (type === 'space') {
+            // Deeper soft thock for spacebar
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(160, now);
+            osc.frequency.exponentialRampToValueAtTime(65, now + 0.045);
+            filter.frequency.setValueAtTime(420, now);
+            gain.gain.setValueAtTime(0.11, now);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.055);
+          } else if (type === 'error') {
+            // Gentle dull tap for mistake
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(140, now);
+            osc.frequency.exponentialRampToValueAtTime(95, now + 0.06);
+            filter.frequency.setValueAtTime(280, now);
+            gain.gain.setValueAtTime(0.08, now);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.065);
+          } else {
+            // Crisp tactile click for normal keys
+            osc.type = 'triangle';
+            const pitchJitter = (Math.random() - 0.5) * 45;
+            osc.frequency.setValueAtTime(340 + pitchJitter, now);
+            osc.frequency.exponentialRampToValueAtTime(110, now + 0.032);
+            filter.frequency.setValueAtTime(1200, now);
+            gain.gain.setValueAtTime(0.075, now);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.036);
+          }
+
+          osc.connect(filter);
+          filter.connect(gain);
+          gain.connect(audioCtx.destination);
+
+          osc.start(now);
+          osc.stop(now + 0.07);
+        } catch (err) {
+          // Ignore audio errors gracefully
+        }
+      }
+
+      /* =====================================================================
+       * 5. APPLICATION STATE & STORAGE KEYS
+       * ===================================================================== */
+      const STORAGE_KEYS = {
+        history: 'gotilipi_history_v1',
+        pb: 'gotilipi_pb_v1',
+        prefs: 'gotilipi_prefs_v1',
+      };
+
+      const state = {
+        lang: 'bn',             // 'bn' | 'en'
+        mode: 'time',           // 'time' | 'words'
+        timeLimit: 30,          // 15 | 30 | 60
+        wordLimit: 25,          // 25 | 50
+        contentType: 'words',   // 'words' | 'sentences'
+        soundEnabled: false,
+        darkMode: true,
+
+        // Live test state
+        words: [],
+        completedInputs: [],    // Stores typed string for each submitted word
+        currentWordIndex: 0,
+        currentInput: '',
+        isComposing: false,
+        isFocused: false,
+        hasStarted: false,
+        isFinished: false,
+        startTime: null,
+        timerInterval: null,
+        remainingSeconds: 30,
+        elapsedSeconds: 0,
+
+        // Accuracy & Chart telemetry
+        totalKeystrokes: 0,
+        correctKeystrokes: 0,
+        wpmTimeline: [],        // Array of WPM samples recorded every second
+        lastTabTime: 0,
+        lastResultSummary: '',
+      };
+
+      /* =====================================================================
+       * 6. DOM ELEMENT REFERENCES
+       * ===================================================================== */
+      const el = {
+        html: document.documentElement,
+        brandTitle: document.getElementById('brandTitle'),
+        brandSubtitle: document.getElementById('brandSubtitle'),
+        langBnBtn: document.getElementById('langBnBtn'),
+        langEnBtn: document.getElementById('langEnBtn'),
+        soundToggleBtn: document.getElementById('soundToggleBtn'),
+        soundIconOff: document.getElementById('soundIconOff'),
+        soundIconOn: document.getElementById('soundIconOn'),
+        themeToggleBtn: document.getElementById('themeToggleBtn'),
+        themeIconSun: document.getElementById('themeIconSun'),
+        themeIconMoon: document.getElementById('themeIconMoon'),
+
+        modeTimeBtn: document.getElementById('modeTimeBtn'),
+        modeWordsBtn: document.getElementById('modeWordsBtn'),
+        modeTimeLabel: document.getElementById('modeTimeLabel'),
+        modeWordsLabel: document.getElementById('modeWordsLabel'),
+        subOptionsContainer: document.getElementById('subOptionsContainer'),
+        contentCommonBtn: document.getElementById('contentCommonBtn'),
+        contentSentenceBtn: document.getElementById('contentSentenceBtn'),
+
+        typingSection: document.getElementById('typingSection'),
+        metricWpmLabel: document.getElementById('metricWpmLabel'),
+        metricAccLabel: document.getElementById('metricAccLabel'),
+        metricProgressLabel: document.getElementById('metricProgressLabel'),
+        liveWpm: document.getElementById('liveWpm'),
+        liveAccuracy: document.getElementById('liveAccuracy'),
+        liveProgress: document.getElementById('liveProgress'),
+        progressBarFill: document.getElementById('progressBarFill'),
+
+        typingArena: document.getElementById('typingArena'),
+        hiddenInput: document.getElementById('hiddenTypingInput'),
+        wordsViewport: document.getElementById('wordsViewport'),
+        wordsContainer: document.getElementById('wordsContainer'),
+        imeStatusDot: document.getElementById('imeStatusDot'),
+        imePreviewLabel: document.getElementById('imePreviewLabel'),
+        imePreviewText: document.getElementById('imePreviewText'),
+        imeHintBadge: document.getElementById('imeHintBadge'),
+        focusOverlay: document.getElementById('focusOverlay'),
+        focusOverlayText: document.getElementById('focusOverlayText'),
+        focusOverlaySubtext: document.getElementById('focusOverlaySubtext'),
+
+        restartBtn: document.getElementById('restartBtn'),
+        restartBtnLabel: document.getElementById('restartBtnLabel'),
+        shortcutOrLabel: document.getElementById('shortcutOrLabel'),
+        shortcutRestartLabel: document.getElementById('shortcutRestartLabel'),
+
+        resultsSection: document.getElementById('resultsSection'),
+        resultHeading: document.getElementById('resultHeading'),
+        resultSpeedBadge: document.getElementById('resultSpeedBadge'),
+        newPbBadge: document.getElementById('newPbBadge'),
+        resultTestMeta: document.getElementById('resultTestMeta'),
+        resWpmLabel: document.getElementById('resWpmLabel'),
+        resWpmValue: document.getElementById('resWpmValue'),
+        resAccLabel: document.getElementById('resAccLabel'),
+        resAccValue: document.getElementById('resAccValue'),
+        resAccSub: document.getElementById('resAccSub'),
+        chartTitle: document.getElementById('chartTitle'),
+        chartPeakLabel: document.getElementById('chartPeakLabel'),
+        wpmChartContainer: document.getElementById('wpmChartContainer'),
+        resWordsLabel: document.getElementById('resWordsLabel'),
+        resCorrectWords: document.getElementById('resCorrectWords'),
+        resWrongWords: document.getElementById('resWrongWords'),
+        resCharsLabel: document.getElementById('resCharsLabel'),
+        resCorrectChars: document.getElementById('resCorrectChars'),
+        resWrongChars: document.getElementById('resWrongChars'),
+        resTimeLabel: document.getElementById('resTimeLabel'),
+        resTimeValue: document.getElementById('resTimeValue'),
+        resBestLabel: document.getElementById('resBestLabel'),
+        resBestValue: document.getElementById('resBestValue'),
+        tryAgainBtn: document.getElementById('tryAgainBtn'),
+        tryAgainLabel: document.getElementById('tryAgainLabel'),
+        copyResultBtn: document.getElementById('copyResultBtn'),
+        copyResultLabel: document.getElementById('copyResultLabel'),
+
+        pbBnTitle: document.getElementById('pbBnTitle'),
+        pbBnValue: document.getElementById('pbBnValue'),
+        pbBnBadge: document.getElementById('pbBnBadge'),
+        pbEnTitle: document.getElementById('pbEnTitle'),
+        pbEnValue: document.getElementById('pbEnValue'),
+        pbEnBadge: document.getElementById('pbEnBadge'),
+        historyTitle: document.getElementById('historyTitle'),
+        clearHistoryBtn: document.getElementById('clearHistoryBtn'),
+        clearConfirmGroup: document.getElementById('clearConfirmGroup'),
+        clearConfirmText: document.getElementById('clearConfirmText'),
+        clearConfirmYes: document.getElementById('clearConfirmYes'),
+        clearConfirmNo: document.getElementById('clearConfirmNo'),
+        historyContent: document.getElementById('historyContent'),
+
+        footerTip: document.getElementById('footerTip'),
+        toastBox: document.getElementById('toastBox'),
+        toastMessage: document.getElementById('toastMessage'),
+      };
+
+      /* =====================================================================
+       * 7. LOCAL STORAGE HELPERS (Safe try/catch)
+       * ===================================================================== */
+      function loadPrefs() {
+        try {
+          const saved = JSON.parse(localStorage.getItem(STORAGE_KEYS.prefs) || '{}');
+          if (saved.lang === 'bn' || saved.lang === 'en') state.lang = saved.lang;
+          if (saved.mode === 'time' || saved.mode === 'words') state.mode = saved.mode;
+          if ([15, 30, 60].includes(saved.timeLimit)) state.timeLimit = saved.timeLimit;
+          if ([25, 50].includes(saved.wordLimit)) state.wordLimit = saved.wordLimit;
+          if (saved.contentType === 'words' || saved.contentType === 'sentences') state.contentType = saved.contentType;
+          if (typeof saved.soundEnabled === 'boolean') state.soundEnabled = saved.soundEnabled;
+          if (typeof saved.darkMode === 'boolean') state.darkMode = saved.darkMode;
+        } catch (e) {
+          // Fallback to defaults
+        }
+      }
+
+      function savePrefs() {
+        try {
+          localStorage.setItem(STORAGE_KEYS.prefs, JSON.stringify({
+            lang: state.lang,
+            mode: state.mode,
+            timeLimit: state.timeLimit,
+            wordLimit: state.wordLimit,
+            contentType: state.contentType,
+            soundEnabled: state.soundEnabled,
+            darkMode: state.darkMode,
+          }));
+        } catch (e) {
+          // Storage disabled or quota full
+        }
+      }
+
+      function getPersonalBests() {
+        try {
+          return JSON.parse(localStorage.getItem(STORAGE_KEYS.pb) || '{"bn":0,"en":0}');
+        } catch (e) {
+          return { bn: 0, en: 0 };
+        }
+      }
+
+      function savePersonalBests(pbObj) {
+        try {
+          localStorage.setItem(STORAGE_KEYS.pb, JSON.stringify(pbObj));
+        } catch (e) {
+          // Ignore storage error
+        }
+      }
+
+      function getHistory() {
+        try {
+          const list = JSON.parse(localStorage.getItem(STORAGE_KEYS.history) || '[]');
+          return Array.isArray(list) ? list : [];
+        } catch (e) {
+          return [];
+        }
+      }
+
+      function addHistoryEntry(entry) {
+        try {
+          const list = getHistory();
+          list.unshift(entry);
+          // Keep most recent 15 tests
+          localStorage.setItem(STORAGE_KEYS.history, JSON.stringify(list.slice(0, 15)));
+        } catch (e) {
+          // Ignore storage error
+        }
+      }
+
+      /* =====================================================================
+       * 8. TOAST NOTIFICATION HELPER
+       * ===================================================================== */
+      let toastTimeout = null;
+
+      function showToast(msg) {
+        el.toastMessage.textContent = msg;
+        el.toastBox.classList.remove('opacity-0', 'translate-y-3');
+        el.toastBox.classList.add('opacity-100', 'translate-y-0');
+        clearTimeout(toastTimeout);
+        toastTimeout = setTimeout(() => {
+          el.toastBox.classList.add('opacity-0', 'translate-y-3');
+          el.toastBox.classList.remove('opacity-100', 'translate-y-0');
+        }, 2300);
+      }
+
+      /* =====================================================================
+       * 9. WORD GENERATION & SHUFFLING
+       * ===================================================================== */
+      function shuffleArray(arr) {
+        const copy = arr.slice();
+        for (let i = copy.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [copy[i], copy[j]] = [copy[j], copy[i]];
+        }
+        return copy;
+      }
+
+      function generateWords() {
+        const targetCount = state.mode === 'words'
+          ? state.wordLimit
+          : Math.max(85, state.timeLimit * 3); // Plenty of words for fast typists in time mode
+
+        const langCorpus = CORPUS[state.lang];
+        const result = [];
+
+        if (state.contentType === 'sentences') {
+          const shuffledPassages = shuffleArray(langCorpus.sentences);
+          let pIndex = 0;
+          while (result.length < targetCount) {
+            const passage = shuffledPassages[pIndex % shuffledPassages.length];
+            const tokens = passage.trim().split(/\s+/);
+            for (const token of tokens) {
+              result.push(token);
+              if (state.mode === 'words' && result.length >= targetCount) break;
+            }
+            pIndex++;
+          }
+        } else {
+          let pool = shuffleArray(langCorpus.words);
+          let idx = 0;
+          while (result.length < targetCount) {
+            if (idx >= pool.length) {
+              pool = shuffleArray(langCorpus.words);
+              idx = 0;
+            }
+            const nextWord = pool[idx++];
+            // Avoid repeating the exact same word back-to-back
+            if (result.length === 0 || result[result.length - 1] !== nextWord) {
+              result.push(nextWord);
+            }
+          }
+        }
+        return result;
+      }
+
+      /* =====================================================================
+       * 10. UI SYNCHRONIZATION (Theme, Language, Mode Controls)
+       * ===================================================================== */
+      function getSpeedBadge(wpm, lang = state.lang) {
+        const list = I18N[lang].badges;
+        for (const item of list) {
+          if (wpm >= item.min) return item.label;
+        }
+        return list[list.length - 1].label;
+      }
+
+      function applyTheme() {
+        if (state.darkMode) {
+          el.html.classList.add('dark');
+          el.themeIconSun.classList.remove('hidden');
+          el.themeIconMoon.classList.add('hidden');
+        } else {
+          el.html.classList.remove('dark');
+          el.themeIconSun.classList.add('hidden');
+          el.themeIconMoon.classList.remove('hidden');
+        }
+      }
+
+      function applySoundUI() {
+        if (state.soundEnabled) {
+          el.soundIconOn.classList.remove('hidden');
+          el.soundIconOff.classList.add('hidden');
+          el.soundToggleBtn.classList.add('text-amber-500', 'dark:text-amber-400', 'border-amber-500/50');
+        } else {
+          el.soundIconOn.classList.add('hidden');
+          el.soundIconOff.classList.remove('hidden');
+          el.soundToggleBtn.classList.remove('text-amber-500', 'dark:text-amber-400', 'border-amber-500/50');
+        }
+      }
+
+      function applyLanguageUI() {
+        const t = I18N[state.lang];
+        el.html.lang = state.lang;
+
+        // Typography switch for crisp Bengali vs crisp English
+        if (state.lang === 'bn') {
+          el.wordsContainer.classList.remove('font-mono');
+          el.wordsContainer.classList.add('font-bangla');
+        } else {
+          el.wordsContainer.classList.remove('font-bangla');
+          el.wordsContainer.classList.add('font-mono');
+        }
+
+        // Header & Brand
+        el.brandTitle.textContent = t.brandTitle;
+        el.brandSubtitle.textContent = t.brandSubtitle;
+
+        // Language Toggle Pill styling
+        const activeLangCls = ['bg-amber-500', 'text-zinc-950', 'shadow-sm'];
+        const inactiveLangCls = ['text-slate-600', 'dark:text-zinc-400', 'hover:text-slate-900', 'dark:hover:text-zinc-100'];
+
+        if (state.lang === 'bn') {
+          el.langBnBtn.classList.add(...activeLangCls);
+          el.langBnBtn.classList.remove(...inactiveLangCls);
+          el.langEnBtn.classList.remove(...activeLangCls);
+          el.langEnBtn.classList.add(...inactiveLangCls);
+        } else {
+          el.langEnBtn.classList.add(...activeLangCls);
+          el.langEnBtn.classList.remove(...inactiveLangCls);
+          el.langBnBtn.classList.remove(...activeLangCls);
+          el.langBnBtn.classList.add(...inactiveLangCls);
+        }
+
+        // Control Bar Labels
+        el.modeTimeLabel.textContent = t.modeTime;
+        el.modeWordsLabel.textContent = t.modeWords;
+        el.contentCommonBtn.textContent = t.contentCommon;
+        el.contentSentenceBtn.textContent = t.contentSentence;
+
+        // Metrics Labels
+        el.metricWpmLabel.textContent = t.metricWpm;
+        el.metricAccLabel.textContent = t.metricAcc;
+        el.metricProgressLabel.textContent = state.mode === 'time' ? t.metricTimeLeft : t.metricWordProg;
+
+        // Typing Arena Labels
+        el.imePreviewLabel.textContent = t.imePreviewLabel;
+        el.imeHintBadge.textContent = t.imeHint;
+        el.focusOverlayText.textContent = t.focusPrompt;
+        el.focusOverlaySubtext.textContent = t.focusSubPrompt;
+        el.restartBtnLabel.textContent = t.restartBtn;
+        el.shortcutOrLabel.textContent = t.shortcutOr;
+        el.shortcutRestartLabel.textContent = t.shortcutRestart;
+
+        // Results Labels
+        el.resultHeading.textContent = t.resultHeading;
+        el.newPbBadge.textContent = t.newPb;
+        el.resWpmLabel.textContent = t.resWpmLabel;
+        el.resAccLabel.textContent = t.resAccLabel;
+        el.resAccSub.textContent = t.resAccSub;
+        el.chartTitle.textContent = t.chartTitle;
+        el.resWordsLabel.textContent = t.resWordsLabel;
+        el.resCharsLabel.textContent = t.resCharsLabel;
+        el.resTimeLabel.textContent = t.resTimeLabel;
+        el.resBestLabel.textContent = t.resBestLabel;
+        el.tryAgainLabel.textContent = t.tryAgain;
+        el.copyResultLabel.textContent = t.copyResult;
+
+        // History & Footer Labels
+        el.pbBnTitle.textContent = t.pbBnTitle;
+        el.pbEnTitle.textContent = t.pbEnTitle;
+        el.historyTitle.querySelector('span').textContent = t.historyTitle;
+        el.clearHistoryBtn.textContent = t.clearHistory;
+        el.clearConfirmText.textContent = t.clearConfirm;
+        el.clearConfirmYes.textContent = t.yes;
+        el.clearConfirmNo.textContent = t.no;
+        el.footerTip.textContent = t.footerTip;
+
+        renderModeControls();
+        renderPersonalBestsAndHistory();
+      }
+
+      function renderModeControls() {
+        const activeBtn = ['bg-amber-500/15', 'text-amber-600', 'dark:text-amber-400', 'ring-1', 'ring-amber-500/30'];
+        const inactiveBtn = ['text-slate-500', 'dark:text-zinc-400', 'hover:text-slate-800', 'dark:hover:text-zinc-200', 'hover:bg-slate-100', 'dark:hover:bg-zinc-800/70'];
+
+        const setActive = (btn, isActive) => {
+          if (isActive) {
+            btn.classList.add(...activeBtn);
+            btn.classList.remove(...inactiveBtn);
+          } else {
+            btn.classList.remove(...activeBtn);
+            btn.classList.add(...inactiveBtn);
+          }
+        };
+
+        setActive(el.modeTimeBtn, state.mode === 'time');
+        setActive(el.modeWordsBtn, state.mode === 'words');
+        setActive(el.contentCommonBtn, state.contentType === 'words');
+        setActive(el.contentSentenceBtn, state.contentType === 'sentences');
+
+        // Render sub-options (15s / 30s / 60s or 25 / 50 words)
+        el.subOptionsContainer.innerHTML = '';
+        const options = state.mode === 'time' ? [15, 30, 60] : [25, 50];
+
+        options.forEach((val) => {
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'px-3 py-1.5 rounded-xl text-xs sm:text-sm font-semibold transition-all duration-150 cursor-pointer';
+          btn.textContent = state.mode === 'time' ? `${val}s` : `${val}`;
+
+          const isSelected = state.mode === 'time' ? state.timeLimit === val : state.wordLimit === val;
+          setActive(btn, isSelected);
+
+          btn.addEventListener('click', () => {
+            if (state.mode === 'time') {
+              state.timeLimit = val;
+            } else {
+              state.wordLimit = val;
+            }
+            savePrefs();
+            renderModeControls();
+            resetTest(true);
+          });
+
+          el.subOptionsContainer.appendChild(btn);
+        });
+
+        const t = I18N[state.lang];
+        el.metricProgressLabel.textContent = state.mode === 'time' ? t.metricTimeLeft : t.metricWordProg;
+      }
+
+      /* =====================================================================
+       * 11. WORD & GRAPHEME RENDERING ENGINE
+       * ===================================================================== */
+      function buildWordElement(word, index) {
+        const wordSpan = document.createElement('span');
+        wordSpan.dataset.index = index;
+        wordSpan.className = 'inline-block px-1.5 py-0.5 rounded-lg transition-colors duration-150';
+        renderWordContent(wordSpan, word, index);
+        return wordSpan;
+      }
+
+      /**
+       * Renders a single word at grapheme-cluster granularity so Bengali
+       * ligatures (যুক্তবর্ণ) and vowel signs (কার) stay visually intact.
+       */
+      function renderWordContent(wordEl, targetWord, index) {
+        wordEl.innerHTML = '';
+
+        // Reset wrapper highlight classes
+        wordEl.className = 'inline-block px-1.5 py-0.5 rounded-lg transition-colors duration-150';
+
+        // 1. Completed Word (Before current index)
+        if (index < state.currentWordIndex) {
+          const typed = state.completedInputs[index] || '';
+          const normTarget = normalizeUnicode(targetWord, true);
+          const normTyped = normalizeUnicode(typed, true);
+
+          if (normTyped === normTarget) {
+            wordEl.classList.add('text-emerald-600', 'dark:text-emerald-400');
+            wordEl.textContent = targetWord;
+          } else {
+            wordEl.classList.add('text-rose-500', 'dark:text-rose-400', 'underline', 'decoration-rose-500/60', 'decoration-2', 'underline-offset-4');
+            wordEl.textContent = targetWord;
+          }
+          return;
+        }
+
+        // 2. Upcoming Word (After current index)
+        if (index > state.currentWordIndex) {
+          wordEl.classList.add('text-slate-400', 'dark:text-zinc-500');
+          wordEl.textContent = targetWord;
+          return;
+        }
+
+        // 3. Active Word (Currently being typed)
+        wordEl.classList.add(
+          'bg-slate-100',
+          'dark:bg-zinc-800/90',
+          'ring-1',
+          'ring-amber-500/40',
+          'shadow-sm'
+        );
+
+        const targetGraphemes = splitGraphemes(targetWord, state.lang);
+        const typedGraphemes = splitGraphemes(state.currentInput, state.lang);
+
+        targetGraphemes.forEach((tCluster, gIdx) => {
+          const span = document.createElement('span');
+          span.textContent = tCluster;
+
+          if (gIdx < typedGraphemes.length) {
+            const normTargetG = normalizeUnicode(tCluster, true);
+            const normTypedG = normalizeUnicode(typedGraphemes[gIdx], true);
+
+            if (normTypedG === normTargetG) {
+              // Exact grapheme match
+              span.className = 'text-emerald-600 dark:text-emerald-400';
+            } else if (
+              gIdx === typedGraphemes.length - 1 &&
+              normTargetG.startsWith(normTypedG)
+            ) {
+              // Partial valid prefix while composing a Bengali conjunct or vowel sign (e.g. ক -> কি or স -> স্কু)
+              span.className = 'text-amber-600 dark:text-amber-300 underline decoration-amber-400/70 decoration-2 underline-offset-4';
+            } else {
+              // Genuine mismatch
+              span.className = 'text-rose-600 dark:text-rose-400 bg-rose-500/15 rounded-sm';
+            }
+          } else {
+            // Untyped grapheme in active word
+            span.className = 'text-slate-600 dark:text-zinc-300';
+            if (gIdx === typedGraphemes.length && state.isFocused) {
+              // Subtle live caret marker at current grapheme
+              span.className = 'text-slate-700 dark:text-zinc-200 border-l-2 border-amber-500 pl-[1px] -ml-[1px]';
+            }
+          }
+
+          wordEl.appendChild(span);
+        });
+
+        // Render extra overflow graphemes if user typed past the word's end
+        if (typedGraphemes.length > targetGraphemes.length) {
+          const extras = typedGraphemes.slice(targetGraphemes.length, targetGraphemes.length + 12);
+          extras.forEach((extraG) => {
+            const extraSpan = document.createElement('span');
+            extraSpan.textContent = extraG;
+            extraSpan.className = 'text-rose-600 dark:text-rose-400 bg-rose-500/20 rounded-sm opacity-90';
+            wordEl.appendChild(extraSpan);
+          });
+        }
+      }
+
+      function renderAllWords() {
+        el.wordsContainer.innerHTML = '';
+        el.wordsContainer.style.transform = 'translateY(0px)';
+
+        const frag = document.createDocumentFragment();
+        state.words.forEach((word, idx) => {
+          frag.appendChild(buildWordElement(word, idx));
+        });
+        el.wordsContainer.appendChild(frag);
+        scrollToActiveWord();
+      }
+
+      function updateWordAt(index) {
+        const node = el.wordsContainer.children[index];
+        if (node && state.words[index] !== undefined) {
+          renderWordContent(node, state.words[index], index);
+        }
+      }
+
+      /**
+       * Smoothly shifts the word container upward as the active word moves
+       * down to subsequent lines, keeping 3 clean lines visible at all times.
+       */
+      function scrollToActiveWord() {
+        const activeNode = el.wordsContainer.children[state.currentWordIndex];
+        if (!activeNode) return;
+
+        const wordTop = activeNode.offsetTop;
+        const wordHeight = activeNode.offsetHeight || 44;
+        // Keep active word on line 1 or line 2
+        const scrollOffset = wordTop > wordHeight + 16 ? wordTop - (wordHeight + 12) : 0;
+        el.wordsContainer.style.transform = `translateY(-${scrollOffset}px)`;
+      }
+
+      function updateImePreview() {
+        const text = state.currentInput;
+        el.imePreviewText.textContent = text ? text : '\u00A0';
+
+        if (state.isComposing) {
+          el.imeStatusDot.className = 'w-2.5 h-2.5 rounded-full bg-amber-400 animate-pulse shrink-0';
+        } else if (state.isFocused) {
+          el.imeStatusDot.className = 'w-2.5 h-2.5 rounded-full bg-emerald-400 shrink-0';
+        } else {
+          el.imeStatusDot.className = 'w-2.5 h-2.5 rounded-full bg-slate-300 dark:bg-zinc-700 shrink-0';
+        }
+      }
+
+      /* =====================================================================
+       * 12. METRICS CALCULATION & TIMER ENGINE
+       * ===================================================================== */
+      function computeStats() {
+        let correctWords = 0;
+        let wrongWords = 0;
+        let correctGraphemes = 0;
+        let wrongGraphemes = 0;
+
+        // Evaluate completed words
+        for (let i = 0; i < state.currentWordIndex; i++) {
+          const target = state.words[i];
+          const typed = state.completedInputs[i] || '';
+          const tNorm = normalizeUnicode(target, true);
+          const uNorm = normalizeUnicode(typed, true);
+
+          const tG = splitGraphemes(target, state.lang);
+          const uG = splitGraphemes(typed, state.lang);
+
+          if (tNorm === uNorm) {
+            correctWords++;
+            // Include the word graphemes + 1 space unit
+            correctGraphemes += tG.length + 1;
+          } else {
+            wrongWords++;
+            const maxLen = Math.max(tG.length, uG.length);
+            for (let k = 0; k < maxLen; k++) {
+              if (
+                k < tG.length &&
+                k < uG.length &&
+                normalizeUnicode(tG[k], true) === normalizeUnicode(uG[k], true)
+              ) {
+                correctGraphemes++;
+              } else {
+                wrongGraphemes++;
+              }
+            }
+          }
+        }
+
+        // Evaluate current in-progress word (important when time expires mid-word)
+        if (state.currentInput.length > 0 && state.currentWordIndex < state.words.length) {
+          const target = state.words[state.currentWordIndex];
+          const tG = splitGraphemes(target, state.lang);
+          const uG = splitGraphemes(state.currentInput, state.lang);
+
+          for (let k = 0; k < uG.length; k++) {
+            if (k < tG.length && normalizeUnicode(tG[k], true) === normalizeUnicode(uG[k], true)) {
+              correctGraphemes++;
+            } else {
+              wrongGraphemes++;
+            }
+          }
+        }
+
+        const now = performance.now();
+        const elapsedSec = state.hasStarted && state.startTime
+          ? Math.max((now - state.startTime) / 1000, 0.5)
+          : 0;
+
+        const wpm = elapsedSec > 0
+          ? Math.max(0, Math.round((correctGraphemes / 5) / (elapsedSec / 60)))
+          : 0;
+
+        const totalEvaluated = correctGraphemes + wrongGraphemes;
+        const accuracy = totalEvaluated > 0
+          ? Math.min(100, Math.max(0, Math.round((correctGraphemes / totalEvaluated) * 100)))
+          : 100;
+
+        return {
+          wpm,
+          accuracy,
+          correctWords,
+          wrongWords,
+          correctGraphemes,
+          wrongGraphemes,
+          elapsedSec,
+        };
+      }
+
+      function updateLiveMetricsUI() {
+        const stats = computeStats();
+        el.liveWpm.textContent = stats.wpm;
+        el.liveAccuracy.textContent = `${stats.accuracy}%`;
+
+        if (state.mode === 'time') {
+          el.liveProgress.textContent = `${state.remainingSeconds}s`;
+          const pct = ((state.timeLimit - state.remainingSeconds) / state.timeLimit) * 100;
+          el.progressBarFill.style.width = `${Math.min(100, Math.max(0, pct))}%`;
+        } else {
+          el.liveProgress.textContent = `${state.currentWordIndex}/${state.wordLimit}`;
+          const pct = (state.currentWordIndex / state.wordLimit) * 100;
+          el.progressBarFill.style.width = `${Math.min(100, Math.max(0, pct))}%`;
+        }
+      }
+
+      function startTimer() {
+        if (state.hasStarted) return;
+        state.hasStarted = true;
+        state.startTime = performance.now();
+        state.wpmTimeline = [];
+
+        state.timerInterval = setInterval(() => {
+          if (state.isFinished) return;
+          state.elapsedSeconds++;
+
+          // Sample WPM every second for the results graph
+          const snap = computeStats();
+          state.wpmTimeline.push(snap.wpm);
+
+          if (state.mode === 'time') {
+            state.remainingSeconds = Math.max(0, state.timeLimit - state.elapsedSeconds);
+            updateLiveMetricsUI();
+            if (state.remainingSeconds <= 0) {
+              finishTest();
+            }
+          } else {
+            updateLiveMetricsUI();
+          }
+        }, 1000);
+      }
+
+      /* =====================================================================
+       * 13. TEST RESET & COMPLETION FLOW
+       * ===================================================================== */
+      function resetTest(autoFocus = false) {
+        clearInterval(state.timerInterval);
+        state.timerInterval = null;
+
+        state.words = generateWords();
+        state.completedInputs = [];
+        state.currentWordIndex = 0;
+        state.currentInput = '';
+        state.isComposing = false;
+        state.hasStarted = false;
+        state.isFinished = false;
+        state.startTime = null;
+        state.elapsedSeconds = 0;
+        state.remainingSeconds = state.timeLimit;
+        state.wpmTimeline = [];
+
+        el.hiddenInput.value = '';
+        el.typingSection.classList.remove('hidden');
+        el.resultsSection.classList.add('hidden');
+        el.progressBarFill.style.width = '0%';
+
+        renderAllWords();
+        updateImePreview();
+        updateLiveMetricsUI();
+
+        if (autoFocus) {
+          focusTypingArena();
+        } else {
+          updateFocusOverlay();
+        }
+      }
+
+      function finishTest() {
+        if (state.isFinished) return;
+        state.isFinished = true;
+        clearInterval(state.timerInterval);
+        state.timerInterval = null;
+        el.hiddenInput.blur();
+
+        const finalStats = computeStats();
+        const finalTimeSec = state.mode === 'time'
+          ? state.timeLimit
+          : Math.max(1, Math.round(finalStats.elapsedSec));
+
+        // Ensure timeline has at least 2 points for clean SVG line chart
+        if (state.wpmTimeline.length === 0) {
+          state.wpmTimeline.push(finalStats.wpm, finalStats.wpm);
+        } else if (state.wpmTimeline.length === 1) {
+          state.wpmTimeline.push(finalStats.wpm);
+        } else {
+          state.wpmTimeline[state.wpmTimeline.length - 1] = finalStats.wpm;
+        }
+
+        // Check & Update Personal Best
+        const pbs = getPersonalBests();
+        const prevBest = pbs[state.lang] || 0;
+        const isNewPb = finalStats.wpm > prevBest && finalStats.wpm > 0;
+        if (isNewPb) {
+          pbs[state.lang] = finalStats.wpm;
+          savePersonalBests(pbs);
+        }
+
+        const t = I18N[state.lang];
+        const badgeText = getSpeedBadge(finalStats.wpm, state.lang);
+        const modeSummary = state.mode === 'time'
+          ? `${state.timeLimit}s`
+          : `${state.wordLimit} ${t.wordsUnit}`;
+        const contentSummary = state.contentType === 'words' ? t.contentCommon : t.contentSentence;
+        const langSummary = state.lang === 'bn' ? t.langLabelBn : t.langLabelEn;
+
+        // Persist to History
+        addHistoryEntry({
+          id: Date.now(),
+          lang: state.lang,
+          modeLabel: modeSummary,
+          wpm: finalStats.wpm,
+          accuracy: finalStats.accuracy,
+          timestamp: Date.now(),
+        });
+
+        // Populate Results Dashboard UI
+        el.resultSpeedBadge.textContent = badgeText;
+        el.newPbBadge.classList.toggle('hidden', !isNewPb);
+        el.resultTestMeta.textContent = `${langSummary} • ${modeSummary} • ${contentSummary}`;
+        el.resWpmValue.textContent = finalStats.wpm;
+        el.resAccValue.textContent = `${finalStats.accuracy}%`;
+        el.resCorrectWords.textContent = finalStats.correctWords;
+        el.resWrongWords.textContent = finalStats.wrongWords;
+        el.resCorrectChars.textContent = finalStats.correctGraphemes;
+        el.resWrongChars.textContent = finalStats.wrongGraphemes;
+        el.resTimeValue.textContent = `${finalTimeSec}s`;
+        el.resBestValue.textContent = `${pbs[state.lang] || finalStats.wpm} WPM`;
+
+        const peakWpm = Math.max(...state.wpmTimeline, finalStats.wpm);
+        el.chartPeakLabel.textContent = `${t.chartPeak} ${peakWpm} WPM`;
+        renderWpmSvgChart(state.wpmTimeline);
+
+        // Prepare shareable copy text
+        state.lastResultSummary = state.lang === 'bn'
+          ? `গতিলিপি টাইপিং টেস্ট (${langSummary} • ${modeSummary}) — গতি: ${finalStats.wpm} WPM | সঠিকতা: ${finalStats.accuracy}% | ব্যাজ: ${badgeText}`
+          : `GotiLipi Typing Test (${langSummary} • ${modeSummary}) — Speed: ${finalStats.wpm} WPM | Accuracy: ${finalStats.accuracy}% | Rank: ${badgeText}`;
+
+        // Toggle visibility smoothly
+        el.typingSection.classList.add('hidden');
+        el.resultsSection.classList.remove('hidden');
+
+        renderPersonalBestsAndHistory();
+      }
+
+      /**
+       * Renders a clean, responsive inline SVG sparkline chart showing WPM progression.
+       */
+      function renderWpmSvgChart(points) {
+        const width = 420;
+        const height = 110;
+        const padX = 12;
+        const padY = 14;
+        const maxVal = Math.max(...points, 20);
+
+        const coords = points.map((val, idx) => {
+          const x = padX + (idx / Math.max(points.length - 1, 1)) * (width - padX * 2);
+          const y = height - padY - (val / maxVal) * (height - padY * 2);
+          return { x: Number(x.toFixed(1)), y: Number(y.toFixed(1)), val };
+        });
+
+        const polylinePoints = coords.map((c) => `${c.x},${c.y}`).join(' ');
+        const areaPath = [
+          `M ${coords[0].x} ${height - padY}`,
+          ...coords.map((c) => `L ${c.x} ${c.y}`),
+          `L ${coords[coords.length - 1].x} ${height - padY}`,
+          'Z',
+        ].join(' ');
+
+        const dotsSvg = coords
+          .filter((_, idx) => points.length <= 20 || idx % Math.ceil(points.length / 15) === 0 || idx === coords.length - 1)
+          .map((c) => `<circle cx="${c.x}" cy="${c.y}" r="3" fill="#f59e0b" />`)
+          .join('');
+
+        el.wpmChartContainer.innerHTML = `
+          <svg viewBox="0 0 ${width} ${height}" class="w-full h-full overflow-visible" role="img" aria-label="WPM progression chart">
+            <defs>
+              <linearGradient id="wpmAreaGrad" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#f59e0b" stop-opacity="0.32" />
+                <stop offset="100%" stop-color="#f59e0b" stop-opacity="0.0" />
+              </linearGradient>
+            </defs>
+            <line x1="${padX}" y1="${height - padY}" x2="${width - padX}" y2="${height - padY}" stroke="currentColor" class="text-slate-200 dark:text-zinc-800" stroke-width="1" />
+            <line x1="${padX}" y1="${padY}" x2="${width - padX}" y2="${padY}" stroke="currentColor" class="text-slate-200/70 dark:text-zinc-800/70" stroke-dasharray="4 4" stroke-width="1" />
+            <path d="${areaPath}" fill="url(#wpmAreaGrad)" />
+            <polyline fill="none" stroke="#f59e0b" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" points="${polylinePoints}" />
+            ${dotsSvg}
+          </svg>
+        `;
+      }
+
+      /* =====================================================================
+       * 14. PERSONAL BEST & HISTORY TABLE RENDERING
+       * ===================================================================== */
+      function renderPersonalBestsAndHistory() {
+        const t = I18N[state.lang];
+        const pbs = getPersonalBests();
+
+        el.pbBnValue.textContent = `${pbs.bn || 0} WPM`;
+        el.pbBnBadge.textContent = pbs.bn > 0 ? getSpeedBadge(pbs.bn, state.lang) : t.noRecord;
+
+        el.pbEnValue.textContent = `${pbs.en || 0} WPM`;
+        el.pbEnBadge.textContent = pbs.en > 0 ? getSpeedBadge(pbs.en, state.lang) : t.noRecord;
+
+        const history = getHistory();
+        if (history.length === 0) {
+          el.clearHistoryBtn.classList.add('hidden');
+          el.historyContent.innerHTML = `
+            <div class="px-5 py-7 text-center text-sm text-slate-400 dark:text-zinc-500">
+              ${t.emptyHistory}
+            </div>
+          `;
+          return;
+        }
+
+        el.clearHistoryBtn.classList.remove('hidden');
+
+        const rowsHtml = history.slice(0, 8).map((item) => {
+          const langLabel = item.lang === 'bn' ? 'বাংলা' : 'English';
+          const badge = getSpeedBadge(item.wpm, state.lang);
+          const dateObj = new Date(item.timestamp);
+          const timeStr = dateObj.toLocaleTimeString(state.lang === 'bn' ? 'bn-BD' : 'en-US', {
+            hour: '2-digit',
+            minute: '2-digit',
+          });
+          const dateStr = dateObj.toLocaleDateString(state.lang === 'bn' ? 'bn-BD' : 'en-US', {
+            day: 'numeric',
+            month: 'short',
+          });
+
+          return `
+            <tr class="border-t border-slate-100 dark:border-zinc-800/70 hover:bg-slate-50/70 dark:hover:bg-zinc-800/30 transition-colors">
+              <td class="px-4 py-2.5 text-xs sm:text-sm font-medium text-slate-700 dark:text-zinc-200">${langLabel}</td>
+              <td class="px-4 py-2.5 text-xs font-mono text-slate-500 dark:text-zinc-400">${item.modeLabel}</td>
+              <td class="px-4 py-2.5 text-sm font-bold font-mono text-amber-600 dark:text-amber-400">${item.wpm}</td>
+              <td class="px-4 py-2.5 text-sm font-semibold font-mono text-emerald-600 dark:text-emerald-400">${item.accuracy}%</td>
+              <td class="px-4 py-2.5 text-xs text-slate-600 dark:text-zinc-300 whitespace-nowrap">${badge}</td>
+              <td class="px-4 py-2.5 text-xs text-slate-400 dark:text-zinc-500 text-right whitespace-nowrap">${dateStr}, ${timeStr}</td>
+            </tr>
+          `;
+        }).join('');
+
+        el.historyContent.innerHTML = `
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr class="text-[11px] uppercase tracking-wider text-slate-400 dark:text-zinc-500 bg-slate-50/80 dark:bg-zinc-950/40">
+                <th class="px-4 py-2.5 font-semibold">${t.colLang}</th>
+                <th class="px-4 py-2.5 font-semibold">${t.colMode}</th>
+                <th class="px-4 py-2.5 font-semibold">${t.colWpm}</th>
+                <th class="px-4 py-2.5 font-semibold">${t.colAcc}</th>
+                <th class="px-4 py-2.5 font-semibold">${t.colBadge}</th>
+                <th class="px-4 py-2.5 font-semibold text-right">${t.colDate}</th>
+              </tr>
+            </thead>
+            <tbody>${rowsHtml}</tbody>
+          </table>
+        `;
+      }
+
+      /* =====================================================================
+       * 15. INPUT & BENGALI IME EVENT HANDLING
+       * ===================================================================== */
+      function focusTypingArena() {
+        if (state.isFinished) return;
+        el.hiddenInput.focus();
+      }
+
+      function updateFocusOverlay() {
+        if (state.isFocused || state.isFinished) {
+          el.focusOverlay.classList.add('opacity-0', 'pointer-events-none');
+          el.typingArena.classList.add('border-amber-500/50', 'dark:border-amber-400/40');
+          el.typingArena.classList.remove('border-slate-200', 'dark:border-zinc-800');
+        } else {
+          el.focusOverlay.classList.remove('opacity-0', 'pointer-events-none');
+          el.typingArena.classList.remove('border-amber-500/50', 'dark:border-amber-400/40');
+          el.typingArena.classList.add('border-slate-200', 'dark:border-zinc-800');
+        }
+        updateWordAt(state.currentWordIndex);
+        updateImePreview();
+      }
+
+      /**
+       * Submits the current word and advances to the next word.
+       */
+      function submitCurrentWord(typedToken) {
+        const targetWord = state.words[state.currentWordIndex];
+        state.completedInputs[state.currentWordIndex] = typedToken;
+
+        const isCorrect = normalizeUnicode(typedToken, true) === normalizeUnicode(targetWord, true);
+        playKeySound(isCorrect ? 'space' : 'error');
+
+        const prevIndex = state.currentWordIndex;
+        state.currentWordIndex++;
+        state.currentInput = '';
+
+        // Dynamically append more words in Time mode if typist approaches the end
+        if (state.mode === 'time' && state.currentWordIndex >= state.words.length - 25) {
+          const extraWords = generateWords().slice(0, 40);
+          const startIdx = state.words.length;
+          state.words.push(...extraWords);
+          const frag = document.createDocumentFragment();
+          extraWords.forEach((w, offset) => {
+            frag.appendChild(buildWordElement(w, startIdx + offset));
+          });
+          el.wordsContainer.appendChild(frag);
+        }
+
+        updateWordAt(prevIndex);
+
+        // Check Word-mode completion
+        if (state.mode === 'words' && state.currentWordIndex >= state.wordLimit) {
+          updateLiveMetricsUI();
+          finishTest();
+          return;
+        }
+
+        updateWordAt(state.currentWordIndex);
+        scrollToActiveWord();
+        updateLiveMetricsUI();
+      }
+
+      /**
+       * Core handler driven by the native `input` & `compositionend` events.
+       * Handles Avro Phonetic, Ridmik, Windows/macOS Bengali IMEs, and mobile
+       * swipe/autocorrect commits reliably without losing যুক্তবর্ণ or কার.
+       */
+      function processInputValue(rawVal) {
+        if (state.isFinished) return;
+
+        // Ignore leading spaces when nothing has been typed for the current word
+        if (rawVal.trim().length === 0 && rawVal.length > 0 && !state.isComposing) {
+          el.hiddenInput.value = '';
+          state.currentInput = '';
+          updateWordAt(state.currentWordIndex);
+          updateImePreview();
+          return;
+        }
+
+        // Start timer on first non-empty keystroke
+        if (!state.hasStarted && rawVal.length > 0) {
+          startTimer();
+        }
+
+        // If NOT in active IME composition and input contains whitespace, submit word(s)
+        if (!state.isComposing && /\s/.test(rawVal)) {
+          const parts = rawVal.split(/\s+/);
+          // Submit all completed tokens before the final segment
+          for (let i = 0; i < parts.length - 1; i++) {
+            const token = parts[i];
+            if (token.length > 0) {
+              submitCurrentWord(token);
+              if (state.isFinished) {
+                el.hiddenInput.value = '';
+                return;
+              }
+            }
+          }
+          // Keep whatever remains after the last space (handles rapid mobile commits)
+          const remainder = parts[parts.length - 1] || '';
+          el.hiddenInput.value = remainder;
+          state.currentInput = remainder;
+          updateWordAt(state.currentWordIndex);
+          updateImePreview();
+          return;
+        }
+
+        // Otherwise, live-update the active word
+        const prevLen = state.currentInput.length;
+        state.currentInput = rawVal;
+
+        if (rawVal.length > prevLen) {
+          // Determine gentle click or soft error tap
+          const targetWord = state.words[state.currentWordIndex] || '';
+          const tG = splitGraphemes(targetWord, state.lang);
+          const uG = splitGraphemes(rawVal, state.lang);
+          const idx = uG.length - 1;
+          if (idx >= 0) {
+            const normU = normalizeUnicode(uG[idx], true);
+            const normT = idx < tG.length ? normalizeUnicode(tG[idx], true) : '';
+            const matchesOrPrefix = normT && (normT === normU || normT.startsWith(normU));
+            playKeySound(matchesOrPrefix ? 'key' : 'error');
+          }
+        }
+
+        updateWordAt(state.currentWordIndex);
+        updateImePreview();
+        updateLiveMetricsUI();
+
+        // Auto-finish on exact match of the very last word in Word Mode (no trailing space needed)
+        if (
+          !state.isComposing &&
+          state.mode === 'words' &&
+          state.currentWordIndex === state.wordLimit - 1
+        ) {
+          const targetWord = state.words[state.currentWordIndex];
+          if (normalizeUnicode(rawVal, true) === normalizeUnicode(targetWord, true)) {
+            el.hiddenInput.value = '';
+            submitCurrentWord(rawVal);
+          }
+        }
+      }
+
+      /* =====================================================================
+       * 16. EVENT LISTENERS
+       * ===================================================================== */
+      // IME Composition Lifecycle
+      el.hiddenInput.addEventListener('compositionstart', () => {
+        state.isComposing = true;
+        updateImePreview();
+      });
+
+      el.hiddenInput.addEventListener('compositionupdate', (e) => {
+        state.isComposing = true;
+        processInputValue(e.target.value);
+      });
+
+      el.hiddenInput.addEventListener('compositionend', (e) => {
+        state.isComposing = false;
+        processInputValue(e.target.value);
+      });
+
+      // Standard & Post-IME Input Event
+      el.hiddenInput.addEventListener('input', (e) => {
+        processInputValue(e.target.value);
+      });
+
+      // Allow stepping back to the previous mistyped word on Backspace when input is empty
+      el.hiddenInput.addEventListener('keydown', (e) => {
+        if (
+          e.key === 'Backspace' &&
+          !state.isComposing &&
+          el.hiddenInput.value === '' &&
+          state.currentWordIndex > 0 &&
+          !state.isFinished
+        ) {
+          const prevIdx = state.currentWordIndex - 1;
+          const prevTyped = state.completedInputs[prevIdx] || '';
+          const prevTarget = state.words[prevIdx] || '';
+
+          // Step back only if previous word had a mistake (classic Monkeytype feel)
+          if (normalizeUnicode(prevTyped, true) !== normalizeUnicode(prevTarget, true)) {
+            e.preventDefault();
+            const oldCurrent = state.currentWordIndex;
+            state.currentWordIndex = prevIdx;
+            state.currentInput = prevTyped;
+            el.hiddenInput.value = prevTyped;
+            updateWordAt(oldCurrent);
+            updateWordAt(state.currentWordIndex);
+            scrollToActiveWord();
+            updateImePreview();
+          }
+        }
+      });
+
+      // Focus & Blur Management
+      el.hiddenInput.addEventListener('focus', () => {
+        state.isFocused = true;
+        updateFocusOverlay();
+      });
+
+      el.hiddenInput.addEventListener('blur', () => {
+        state.isFocused = false;
+        updateFocusOverlay();
+      });
+
+      el.typingArena.addEventListener('click', focusTypingArena);
+      el.focusOverlay.addEventListener('click', focusTypingArena);
+
+      // Global Shortcuts: Esc OR Tab + Enter to quick-restart
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          e.preventDefault();
+          resetTest(true);
+          return;
+        }
+        if (e.key === 'Tab') {
+          e.preventDefault();
+          state.lastTabTime = Date.now();
+          el.restartBtn.focus();
+          return;
+        }
+        if (e.key === 'Enter' && Date.now() - state.lastTabTime < 1500) {
+          e.preventDefault();
+          state.lastTabTime = 0;
+          resetTest(true);
+        }
+      });
+
+      // Re-calculate active word scroll position on window resize
+      window.addEventListener('resize', () => {
+        if (!state.isFinished) scrollToActiveWord();
+      });
+
+      // Language Switch Buttons
+      el.langBnBtn.addEventListener('click', () => {
+        if (state.lang === 'bn') return;
+        state.lang = 'bn';
+        savePrefs();
+        applyLanguageUI();
+        resetTest(true);
+      });
+
+      el.langEnBtn.addEventListener('click', () => {
+        if (state.lang === 'en') return;
+        state.lang = 'en';
+        savePrefs();
+        applyLanguageUI();
+        resetTest(true);
+      });
+
+      // Mode & Content Type Buttons
+      el.modeTimeBtn.addEventListener('click', () => {
+        if (state.mode === 'time') return;
+        state.mode = 'time';
+        savePrefs();
+        renderModeControls();
+        resetTest(true);
+      });
+
+      el.modeWordsBtn.addEventListener('click', () => {
+        if (state.mode === 'words') return;
+        state.mode = 'words';
+        savePrefs();
+        renderModeControls();
+        resetTest(true);
+      });
+
+      el.contentCommonBtn.addEventListener('click', () => {
+        if (state.contentType === 'words') return;
+        state.contentType = 'words';
+        savePrefs();
+        renderModeControls();
+        resetTest(true);
+      });
+
+      el.contentSentenceBtn.addEventListener('click', () => {
+        if (state.contentType === 'sentences') return;
+        state.contentType = 'sentences';
+        savePrefs();
+        renderModeControls();
+        resetTest(true);
+      });
+
+      // Sound Toggle
+      el.soundToggleBtn.addEventListener('click', () => {
+        state.soundEnabled = !state.soundEnabled;
+        savePrefs();
+        applySoundUI();
+        if (state.soundEnabled) {
+          initAudio();
+          playKeySound('key');
+          showToast(I18N[state.lang].soundOnToast);
+        } else {
+          showToast(I18N[state.lang].soundOffToast);
+        }
+      });
+
+      // Theme Toggle
+      el.themeToggleBtn.addEventListener('click', () => {
+        state.darkMode = !state.darkMode;
+        savePrefs();
+        applyTheme();
+      });
+
+      // Restart & Try Again Buttons
+      el.restartBtn.addEventListener('click', () => resetTest(true));
+      el.tryAgainBtn.addEventListener('click', () => resetTest(true));
+
+      // Copy Result using document.execCommand('copy') for universal iFrame compatibility
+      el.copyResultBtn.addEventListener('click', () => {
+        const t = I18N[state.lang];
+        try {
+          const tempArea = document.createElement('textarea');
+          tempArea.value = state.lastResultSummary;
+          tempArea.setAttribute('readonly', '');
+          tempArea.style.position = 'fixed';
+          tempArea.style.opacity = '0';
+          document.body.appendChild(tempArea);
+          tempArea.select();
+          const ok = document.execCommand('copy');
+          document.body.removeChild(tempArea);
+          showToast(ok ? t.copiedToast : t.copyFailedToast);
+        } catch (err) {
+          showToast(t.copyFailedToast);
+        }
+      });
+
+      // Inline Clear History Confirmation (Avoids native confirm())
+      el.clearHistoryBtn.addEventListener('click', () => {
+        el.clearHistoryBtn.classList.add('hidden');
+        el.clearConfirmGroup.classList.remove('hidden');
+        el.clearConfirmGroup.classList.add('flex');
+      });
+
+      el.clearConfirmNo.addEventListener('click', () => {
+        el.clearConfirmGroup.classList.add('hidden');
+        el.clearConfirmGroup.classList.remove('flex');
+        el.clearHistoryBtn.classList.remove('hidden');
+      });
+
+      el.clearConfirmYes.addEventListener('click', () => {
+        try {
+          localStorage.removeItem(STORAGE_KEYS.history);
+          localStorage.removeItem(STORAGE_KEYS.pb);
+        } catch (e) {
+          // Ignore storage error
+        }
+        el.clearConfirmGroup.classList.add('hidden');
+        el.clearConfirmGroup.classList.remove('flex');
+        renderPersonalBestsAndHistory();
+        showToast(I18N[state.lang].clearedToast);
+      });
+
+      /* =====================================================================
+       * 17. BOOTSTRAP APPLICATION
+       * ===================================================================== */
+      function init() {
+        loadPrefs();
+        applyTheme();
+        applySoundUI();
+        applyLanguageUI();
+        resetTest(false);
+      }
+
+      init();
+    })();
+  </script>
+</body>
+</html>
